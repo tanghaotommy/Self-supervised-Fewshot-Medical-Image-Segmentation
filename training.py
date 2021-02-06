@@ -70,6 +70,8 @@ def main(_run, _config, _log):
     _log.info(f'###### Labels excluded in training : {[lb for lb in _config["exclude_cls_list"]]} ######')
     _log.info(f'###### Unseen labels evaluated in testing: {[lb for lb in test_labels]} ######')
 
+    print(_config)
+    print(_config['path'][data_name]['data_dir'])
     tr_parent = SuperpixelDataset( # base dataset
         which_dataset = baseset_name,
         base_dir=_config['path'][data_name]['data_dir'],

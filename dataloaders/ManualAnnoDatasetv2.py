@@ -50,8 +50,8 @@ class ManualAnnoDataset(BaseDataset):
         self.tile_z_dim = tile_z_dim
         self.base_dir = base_dir
         self.nsup = nsup
-        self.img_pids = [ re.findall('\d+', fid)[-1] for fid in glob.glob(self.base_dir + "/image_*.nii.gz") ]
-        self.img_pids = CircularList(sorted( self.img_pids, key = lambda x: int(x))) # make it circular for the ease of spliting folds
+        self.img_pids = [ fid.split("_")[-1].split(".")[0] for fid in glob.glob(self.base_dir + "/image_*.nii.gz") ]
+        self.img_pids = CircularList(sorted( self.img_pids, key = lambda x: str(x))) # make it circular for the ease of spliting folds
 
         self.exclude_lbs = exclude_list
         if len(exclude_list) > 0:

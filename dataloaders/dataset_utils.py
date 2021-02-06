@@ -98,7 +98,9 @@ def get_normalize_op(modality, fids):
         return MR_normalize #, {'mean': None, 'std': None} # we do not really need the global statistics for MR
 
     elif modality == 'CT':
-        ct_mean, ct_std = get_CT_statistics(fids)
+        # ct_mean, ct_std = get_CT_statistics(fids)
+        ct_mean = 0.05735856341872895
+        ct_std = 0.1679941474909647
         # debug
         print(f'###### DEBUG_DATASET CT_STATS NORMALIZED MEAN {ct_mean / 255} STD {ct_std / 255} ######')
 

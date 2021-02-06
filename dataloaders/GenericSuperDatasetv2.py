@@ -55,8 +55,8 @@ class SuperpixelDataset(BaseDataset):
         # find scans in the data folder
         self.nsup = nsup
         self.base_dir = base_dir
-        self.img_pids = [ re.findall('\d+', fid)[-1] for fid in glob.glob(self.base_dir + "/image_*.nii.gz") ]
-        self.img_pids = CircularList(sorted( self.img_pids, key = lambda x: int(x)))
+        self.img_pids = [ fid.split("_")[-1].split(".")[0] for fid in glob.glob(self.base_dir + "/image_*.nii.gz") ]
+        self.img_pids = CircularList(sorted( self.img_pids, key = lambda x: str(x)))
 
         # experiment configs
         self.exclude_lbs = exclude_list
@@ -235,7 +235,7 @@ class SuperpixelDataset(BaseDataset):
 
         """
         if bi_val == None:
-            bi_val = int(torch.randint(low = 1, high = int(sup_max_cls), size = (1,)))
+            bi_val = int(torch.randint(low = 1, high = int(sup_max_cls) + 1, size = (1,)))
 
         return np.float32(super_map == bi_val)
 
@@ -249,6 +249,8 @@ class SuperpixelDataset(BaseDataset):
 
         image_t = curr_dict["img"]
         label_raw = curr_dict["lb"]
+        # print(label_raw.shape, sup_max_cls)
+        # np.save('/home/htang6/workspace/Self-supervised-Fewshot-Medical-Image-Segmentation/test.npy', label_raw)
 
         for _ex_cls in self.exclude_lbs:
             if curr_dict["z_id"] in self.tp1_cls_map[self.real_label_name[_ex_cls]][curr_dict["scan_id"]]: # if using setting 1, this slice need to be excluded since it contains label which is supposed to be unseen
